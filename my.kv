@@ -1,0 +1,23 @@
+<MyGrid>:
+
+    razon_social: razon_social
+
+    GridLayout:
+        cols:1
+        size: root.width - 100, root.height -100
+        pos: 100, 100
+
+        GridLayout:
+            cols:2
+
+            Label:
+                text: "Razon social: "
+
+            TextInput:
+                id: razon_social
+                multiline:False
+                size_hint_x: .600
+                height: 50
+                text: '502'
+                background_color: [100, 500, 1, 1]
+                

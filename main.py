@@ -6,69 +6,93 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 from kivy.uix.popup import Popup
+from kivy.properties import ObjectProperty
+from kivy.uix.accordion import Accordion, AccordionItem
 
+class AccordionApp(App):
+    def build(self):
+        root = Accordion()
+        for x in range(2):
+            item = AccordionItem(title='Title %d' % x)
+            #item.add_widget(Label(text='Very big content\n' * 10))
+            root.add_widget(item)
+        return root
 
 class MyGrid(GridLayout):
 
-	
+    def __init__(self, **kwargs):
+        super(MyGrid, self).__init__(**kwargs)
+        self.cols = 1
 
-	def __init__(self, **kwargs):
-		super(MyGrid, self).__init__(**kwargs)
-		self.cols = 1
+        self.inside = GridLayout()
+        self.inside.cols = 2
 
-		self.inside = GridLayout()
-		self.inside.cols = 2
+        self.inside.add_widget(Label(text="Nombre: "))
+        self.name = TextInput(multiline=False)
+        self.inside.add_widget(self.name)
 
-		self.inside.add_widget(Label(text="Nombre: "))
-		self.name = TextInput(multiline=False)
-		self.inside.add_widget(self.name)
+        self.inside.add_widget(Label(text="Apellido: "))
+        self.lastName = TextInput(multiline=False)
+        self.inside.add_widget(self.lastName)
 
-		self.inside.add_widget(Label(text="Apellido: "))
-		self.lastName = TextInput(multiline=False)
-		self.inside.add_widget(self.lastName)
+        self.inside.add_widget(Label(text="Edad: "))
+        self.edad = TextInput(multiline=False)
+        self.inside.add_widget(self.edad)
 
-		self.inside.add_widget(Label(text="Edad: "))
-		self.edad = TextInput(multiline=False)
-		self.inside.add_widget(self.edad)
+        self.inside.add_widget(Label(text="Email: "))
+        self.email = TextInput(multiline=False)
+        self.inside.add_widget(self.email)
 
-		self.inside.add_widget(Label(text="Email: "))
-		self.email = TextInput(multiline=False)
-		self.inside.add_widget(self.email)
+        self.add_widget(self.inside)
 
-		self.add_widget(self.inside)
+        self.vaciar = Button(text="Resetear", font_size=40)
+        self.vaciar.bind(on_press=self.vaciar_inputs)
+        self.add_widget(self.vaciar)
+        
+        self.submit = Button(text="Enviar datos", font_size=40)
+        self.submit.bind(on_press=self.pressed)
+        self.add_widget(self.submit)
 
-		self.submit = Button(text="Submit", font_size=40)
-		self.submit.bind(on_press=self.pressed)
-		self.add_widget(self.submit)
 
-
-	def invalidForm():
-			pop = Popup(title='Invalid Form',
+    def invalidForm():
+            pop = Popup(title='Invalid Form',
       content=Label(text='Please fill in all inputs with valid information.'),
       size_hint=(None, None), size=(400, 400))
 
-			pop.open()
+            pop.open()
 
+    def vaciar_inputs(self, text_inputs):
+        self.name.text = ""
+        self.lastName.text = ""
+        self.email.text = ""
+        self.edad.text = ""
+        self.razon_social.text = ""
 
-	def pressed(self, instance):
-		name = self.name.text
-		last = self.lastName.text
-		email = self.email.text
-		edad = self.edad.text
-		resultadoEdad = edad.isdigit()
-		if resultadoEdad == False:
-			invalidForm()
+    def pressed(self, instance):
+        name = self.name.text
+        last = self.lastName.text
+        email = self.email.text
+        edad = self.edad.text
+        resultadoEdad = edad.isdigit()
+        if resultadoEdad == False:
+            #no lo puedo hacer andar desde una funcion como por ejemplo invalidForm()
+            pop = Popup(title='Invalid Form',
+                content=Label(text='La edad es vacia o no tiene formato numerico.'),
+                size_hint=(None, None), size=(400, 400))
 
-		print("Name:", name, "Last Name:", last, "Email:", email, "Edad:", edad)
-		self.name.text = ""
-		self.lastName.text = ""
-		self.email.text = ""
-		self.edad.text = ""
+            pop.open()
+
+        print("Name:", name, "Last Name:", last, "Email:", email, "Edad:", edad)
+        self.name.text = ""
+        self.lastName.text = ""
+        self.email.text = ""
+        self.edad.text = ""
 
 class MyApp(App):
-	def build(self):
-		return MyGrid()
+    def build(self):
+        return MyGrid()
 
 
 if __name__ == "__main__":
-	MyApp().run()
+    MyApp().run()
+    AccordionApp().run()
