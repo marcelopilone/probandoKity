@@ -101,6 +101,23 @@ class MyGrid(GridLayout):
 
             pop.open()
 
+        mydb = mysql.connector.connect(
+          host="localhost",
+          user="root",
+          passwd="uejn_servER8",
+          database="uejn_afigestion"
+        )
+
+        mycursor = mydb.cursor()
+
+        sql = "INSERT INTO personas (nombre, domicilio) VALUES (%s, %s)"
+        val = (name, email)
+        mycursor.execute(sql, val)
+
+        mydb.commit()
+
+        print(mycursor.rowcount, "record inserted.")
+
         print("Name:", name, "Last Name:", last, "Email:", email, "Edad:", edad)
         self.name.text = ""
         self.lastName.text = ""
