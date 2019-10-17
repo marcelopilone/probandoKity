@@ -1,4 +1,5 @@
 import kivy
+import mysql.connector
 from kivy.app import App
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
@@ -22,6 +23,18 @@ class MyGrid(GridLayout):
 
     def __init__(self, **kwargs):
         super(MyGrid, self).__init__(**kwargs)
+
+        mydb = mysql.connector.connect(
+          host="localhost",
+          user="root",
+          passwd="uejn_servER8",
+          database="uejn_afigestion"
+        )
+
+        mycursor = mydb.cursor()
+
+        mycursor.execute("SELECT * FROM personas limit 5")
+
         self.cols = 1
 
         self.inside = GridLayout()
@@ -52,6 +65,12 @@ class MyGrid(GridLayout):
         self.submit = Button(text="Enviar datos", font_size=40)
         self.submit.bind(on_press=self.pressed)
         self.add_widget(self.submit)
+
+        myresult = mycursor.fetchall()
+        for x in myresult:
+          # el 7 es el nombre de la persona
+          self.inside.add_widget(Label(text=x[7]))
+          print(x[7])
 
 
     def invalidForm():
